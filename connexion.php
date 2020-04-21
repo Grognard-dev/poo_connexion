@@ -12,9 +12,9 @@ if (isset($_POST['bouton'])){
     if ($pseudo_user === null || $password_user === null) {
         echo 'Veuillez remplir tous les champs';
     }else {
-        // la fonction prépare et execute son dans la meme fonction, il suffit de la remplir de votre requete et de vos valeurs //
-        $user = new User($pseudo_user,$password_user);
-
+        
+        $user = new User($pseudo_user,$password_user,'bonjour');
+// la fonction prépare et execute son dans la meme fonction, il suffit de la remplir de votre requete et de vos valeurs //
         $requeteprepare = $db->prepareAndExecute('SELECT * FROM utilisateur WHERE Pseudo = :Pseudo',[":Pseudo" => $user->username] );
         
         $utilisateur = $requeteprepare->fetch(PDO::FETCH_ASSOC);
