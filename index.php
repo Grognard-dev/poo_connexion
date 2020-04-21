@@ -1,6 +1,8 @@
 <?php
 require_once "Database.php";
 require_once "boot.php";
+
+$db = new Database($config["utilisateur"],$config["mdp"], $config["dsn"]);
 ?>
 <!DOCTYPE html>
 <html lang="en">

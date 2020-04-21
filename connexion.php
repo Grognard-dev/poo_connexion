@@ -1,5 +1,6 @@
 <?php
 require_once "Database.php";
+require_once "User.php";
 require_once "boot.php";
 
 $db = new Database($config["utilisateur"],$config["mdp"], $config["dsn"]);
@@ -11,14 +12,17 @@ if (isset($_POST['bouton'])){
     if ($pseudo_user === null || $password_user === null) {
         echo 'Veuillez remplir tous les champs';
     }else {
-        $requeteprepare = $db->prepareAndExecute('SELECT * FROM utilisateur WHERE Pseudo = :Pseudo',[":Pseudo" => $pseudo_user] );
+        // la fonction prépare et execute son dans la meme fonction, il suffit de la remplir de votre requete et de vos valeurs //
+        $user = new User($pseudo_user,$password_user);
+
+        $requeteprepare = $db->prepareAndExecute('SELECT * FROM utilisateur WHERE Pseudo = :Pseudo',[":Pseudo" => $user->username] );
         
         $utilisateur = $requeteprepare->fetch(PDO::FETCH_ASSOC);
         if($utilisateur === false){
             $erreur =  "login et / ou mot de passe incorrect";
         }
         
-        if(!password_verify($password_user, $utilisateur["mot_de_passe"] ?? '')) {
+        if(!password_verify($user->password, $utilisateur["mot_de_passe"] ?? '')) {
             $erreur =  "login et / ou mot de passe incorrect";
         }
         
@@ -29,12 +33,12 @@ if (isset($_POST['bouton'])){
             session_regenerate_id();
             $_SESSION["ID"] = $utilisateur["ID_utilisateur"];
             $_SESSION["Pseudo"] = $utilisateur["Pseudo"];
-            if($utilisateur["Admin"] === "1"){
+            if($utilisateur["Admin"] === 1){
                 $_SESSION['is_admin'] = true;
             }else{
                 $_SESSION['is_admin'] = false;
             }
-            header('Location: http://lefevre.simplon-charleville.fr/poo_connexion/index.php');
+            header('Location: index.php');
             exit();
         }
     }
@@ -78,7 +82,6 @@ if(isset($_GET['erreur'])){
     echo "<p style='color:red'>Utilisateur ou mot de passe incorrect</p>";
 }
 ?> 
-<a href="inscritption.php">inscription</a>
-<a href="connexion.php">connexion</a>
+
 </body>
 </html>

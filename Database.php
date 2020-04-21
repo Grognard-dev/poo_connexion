@@ -1,6 +1,6 @@
 <?php 
 require_once "boot.php";
-  
+  //connecter votre BDD //
      $dbh = new PDO($config["dsn"], $config["utilisateur"], $config["mdp"]); 
 
 
@@ -25,7 +25,7 @@ class Database{
 
         $this->connect = $dbh;
     }
-
+        // requete sql avec les valeurs //
     public function prepareAndExecute(string $requete,array $valeurs)
     {
 
@@ -33,7 +33,7 @@ class Database{
         $requeteprepare->execute($valeurs);
         return $requeteprepare;
     }
-
+    // pour ajouter la dernier ID insérer /
     public function lastInsertID()
     {
        return  $this->connect->lastInsertID();

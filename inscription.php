@@ -65,7 +65,6 @@ if (isset($_POST['bouton'])){
 }
 ?>
 </form>
-<a href="inscritption.php">inscription</a>
-<a href="connexion.php">connexion</a>
+
 </body>
 </html>
