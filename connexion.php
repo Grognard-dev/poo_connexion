@@ -34,7 +34,7 @@ if (isset($_POST['bouton'])){
             }else{
                 $_SESSION['is_admin'] = false;
             }
-            header('Location: http://lefevre.simplon-charleville.fr/poo_connexion/connexion.php');
+            header('Location: http://lefevre.simplon-charleville.fr/poo_connexion/index.php');
             exit();
         }
     }
@@ -47,10 +47,11 @@ if (isset($_POST['bouton'])){
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
+<title>connexion</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-
+<?php include 'navbar.php'; ?>
 <form action="" method="POST">
 <h2>Connexion</h2>
 
@@ -77,5 +78,7 @@ if(isset($_GET['erreur'])){
     echo "<p style='color:red'>Utilisateur ou mot de passe incorrect</p>";
 }
 ?> 
+<a href="inscritption.php">inscription</a>
+<a href="connexion.php">connexion</a>
 </body>
 </html>
