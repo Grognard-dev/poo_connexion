@@ -1,7 +1,7 @@
 <?php 
 require_once "boot.php";
 require_once "Database.php";
-
+require_once "UserTable.php";
 
 class User
 {
@@ -14,7 +14,9 @@ class User
     public $email;
     public $admin;
     
-    
+    public function __construct()
+    {
+    }
    
     
 }

@@ -4,6 +4,8 @@ session_start();
 ini_set("display_errors","1");
 error_reporting(E_ALL);
 
+
+
 require "library.php";
 
 $erreur = null;
@@ -14,3 +16,7 @@ if(isset($_SESSION['flash']) ){
 }
 
 $config = require "config.php";
+
+spl_autoload_register(function ($class_name) {
+    require_once 'classes/'.$class_name.'.php' ;
+});

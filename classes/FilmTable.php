@@ -36,7 +36,7 @@ class FilmTable
         return $this->createFilm($tableau);
     }
 
-    public function recuptous()
+    public function recuptousfilm()
     {
          $requete = $this->db->prepareAndExecute("SELECT * FROM Film",[]);
         $tableau = $requete->fetchAll();

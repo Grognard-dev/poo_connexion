@@ -1,8 +1,4 @@
 <?php 
-require_once "boot.php";
-  //connecter votre BDD //
-     $dbh = new PDO($config["dsn"], $config["utilisateur"], $config["mdp"]); 
-
 
 class Database{
     protected $utilisateur;

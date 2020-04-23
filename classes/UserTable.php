@@ -23,7 +23,7 @@ class UserTable
         if($tableau === false){
             return null;
         }
-        return $this->createUser($tableau);
+        return $this->createUserFromDbResult($tableau);
     }
 
     public function recupParPseudo($pseudo)
@@ -33,10 +33,23 @@ class UserTable
         if($tableau === false){
             return null;
         }
-        return $this->createUser($tableau);
+        return $this->createUserFromDbResult($tableau);
     }
 
-    protected function createUser($tableau)
+    
+     public function insertUser($user)
+    {
+       $inscription = $this->db->prepareAndExecute("INSERT INTO utilisateur (Email, mot_de_passe, Prenom, Nom, Pseudo) 
+        VALUES (:Email, :mot_de_passe, :Prenom, :Nom, :Pseudo)",
+        [':Email' => $user->email,
+        ':mot_de_passe' => password_hash($user->mot_de_passe, PASSWORD_DEFAULT ),
+        ':Prenom' => $user->prenom,
+        ':Nom'=>$user->nom,
+        ':Pseudo'=>$user->pseudo]) ;
+        
+    }
+
+    protected function createUserFromDbResult($tableau)
     {
          $user = new User();
          //hydratation des valeurs //
