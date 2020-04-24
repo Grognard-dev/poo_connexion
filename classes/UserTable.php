@@ -13,22 +13,22 @@ class UserTable
     public function __construct($db)
     {
         $this->db = $db;
-       
+        
     }
     
-     public  function recupParId($ID)
+    public  function recupParId($ID)
     {
-         $requete = $this->db->prepareAndExecute('SELECT * FROM utilisateur WHERE ID_utilisateur = :ID_utilisateur',[':ID_utilisateur' => $ID]);
+        $requete = $this->db->prepareAndExecute('SELECT * FROM utilisateur WHERE ID_utilisateur = :ID_utilisateur',[':ID_utilisateur' => $ID]);
         $tableau = $requete->fetch();
         if($tableau === false){
             return null;
         }
         return $this->createUserFromDbResult($tableau);
     }
-
+    
     public function recupParPseudo($pseudo)
     {
-         $requete = $this->db->prepareAndExecute('SELECT * FROM utilisateur WHERE Pseudo = :Pseudo',[':Pseudo' => $pseudo]);
+        $requete = $this->db->prepareAndExecute('SELECT * FROM utilisateur WHERE Pseudo = :Pseudo',[':Pseudo' => $pseudo]);
         $tableau = $requete->fetch();
         if($tableau === false){
             return null;
@@ -36,23 +36,35 @@ class UserTable
         return $this->createUserFromDbResult($tableau);
     }
 
-    
-     public function insertUser($user)
+    public function activationtoken($pseudo)
     {
-       $inscription = $this->db->prepareAndExecute("INSERT INTO utilisateur (Email, mot_de_passe, Prenom, Nom, Pseudo) 
-        VALUES (:Email, :mot_de_passe, :Prenom, :Nom, :Pseudo)",
+     
+        $this->db->prepareAndExecute("UPDATE utilisateur SET actif = 1 WHERE Pseudo = :Pseudo ",[':Pseudo' => $pseudo]);
+      
+     
+    }
+    
+    
+    public function insertUser($user)
+    {
+        
+        $inscription = $this->db->prepareAndExecute("INSERT INTO utilisateur (Email, mot_de_passe, Prenom, Nom, Pseudo,token_utilisateur,actif) 
+        VALUES (:Email, :mot_de_passe, :Prenom, :Nom, :Pseudo,:token_utilisateur,:actif)",
         [':Email' => $user->email,
         ':mot_de_passe' => password_hash($user->mot_de_passe, PASSWORD_DEFAULT ),
         ':Prenom' => $user->prenom,
         ':Nom'=>$user->nom,
-        ':Pseudo'=>$user->pseudo]) ;
-        
+        ':Pseudo'=>$user->pseudo,
+        ':token_utilisateur'=> $user->token_utilisateur,
+        ':actif'=>0
+        ]) ;
+    
     }
-
+    
     protected function createUserFromDbResult($tableau)
     {
-         $user = new User();
-         //hydratation des valeurs //
+        $user = new User();
+        //hydratation des valeurs //
         $user->ID_utilisateur = $tableau['ID_utilisateur'];
         $user->nom = $tableau['Nom'];
         $user->prenom = $tableau['Prenom'];
@@ -60,6 +72,8 @@ class UserTable
         $user->pseudo = $tableau['Pseudo'];
         $user->email = $tableau['Email'];
         $user->admin = $tableau['Admin'];
+        $user->token_utilisateur = $tableau['token_utilisateur'];
+        $user->actif = $tableau['actif'];
         return $user;
     }
 }

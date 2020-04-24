@@ -1,6 +1,5 @@
 <?php
-require_once "Database.php";
-require_once "UserTable.php";
+
 require_once "boot.php";
 
 $db = new Database($config["utilisateur"],$config["mdp"], $config["dsn"]);
@@ -18,6 +17,7 @@ if (isset($_POST['bouton'])){
        
         $usertable = new UserTable($db);
         $utilisateur = $usertable->recupParPseudo($pseudo_user);
+        $actif = $utilisateur->actif;
         if($utilisateur === null){
             $erreur =  "login et / ou mot de passe incorrect";
         }
@@ -25,8 +25,11 @@ if (isset($_POST['bouton'])){
         if(!password_verify($password_user, $utilisateur->mot_de_passe ?? '')) {
             $erreur =  "login et / ou mot de passe incorrect";
         }
-        
-        if( $erreur === null){
+        if($actif == '0')
+        {
+            $erreur = "compte non actif";
+        }
+        if( $erreur === null ){
             if (session_status() === PHP_SESSION_NONE){
                 session_start();
             }
@@ -64,14 +67,14 @@ if (isset($_POST['bouton'])){
 }
 ?>
 
-<label><b>Nom d'utilisateur</b></label>
-<input type="text" name="pseudo_user" required> <br>
+<label class="block text-gray-700 text-dm font-bold mb-2"><b>Nom d'utilisateur</b></label>
+<input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline " type="text" name="pseudo_user" required> <br>
 
-<label><b>Mot de passe</b></label>
-<input  type="password" name="password_user" required><br>
+<label class="block text-gray-700 text-dm font-bold mb-2"><b>Mot de passe</b></label>
+<input class="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "  type="password" name="password_user" required><br>
 
 <div class="bouton">
-<button type="submit" name="bouton" class="btn btn-primary mb-2">connexion</button>
+<button class=" m-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" name="bouton" class="btn btn-primary mb-2">connexion</button>
 </div>
 
 

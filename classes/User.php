@@ -13,6 +13,8 @@ class User
     public $pseudo;
     public $email;
     public $admin;
+    public $token_utilisateur;
+    public $actif;
     
     public function __construct()
     {
